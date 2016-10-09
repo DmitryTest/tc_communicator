@@ -1,0 +1,51 @@
+{% if errors[constant('AppBundle\\Service\\RzdFacade::TRAINS_PATH')] is defined %}
+    <div class="error">
+        error code: {{ errors[constant('AppBundle\\Service\\RzdFacade::TRAINS_PATH')]['code'] }}
+        <br>
+        {{ errors[constant('AppBundle\\Service\\RzdFacade::TRAINS_PATH')]['desc'] }}
+    </div>
+{% endif %}
+
+{% if trains %}
+    <h1>Trains</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Category</th>
+                <th>Depart time</th>
+                <th>Arrival time</th>
+                <th>Travel time</th>
+                <th>Get carriage</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for train in trains %}
+            <tr>
+                <td>{{ train.getNumber }}</td>
+                <td>{{ train.getCategory.getCategory}}</td>
+                <td>{{ train.getDepartTime|date('m.d') }}</td>
+                <td>{{ train.getArrivalTime|date('m.d') }}</td>
+                <td>{{ train.getTravelTime }}</td>
+                <td>
+                    <button data-train-id="{{ train.getNumber }}">Get carriage</button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% block javascripts %}
+    <script>
+        var trainId = document.getElementById('form_trainId');
+        trainId.value = '';
+
+        var getCarriageBtns = document.querySelectorAll('button[data-train-id]');
+        getCarriageBtns.forEach(function (btn) {
+            btn.onclick = function () {
+                trainId.value = this.dataset.trainId;
+            }
+        });
+    </script>
+{% endblock %}

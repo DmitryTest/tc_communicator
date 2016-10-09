@@ -10,7 +10,7 @@ use DateTime;
 use SimpleXMLElement;
 
 class RzdFacade {
-    const BASE_PATH = '../web/ws/';
+    const BASE_PATH = 'https://raw.githubusercontent.com/DmitryTest/tc_communicator/master/web/ws/';
     const TRAINS_PATH = 'trains_list.xml';
     const CARRIAGE_PATH = 'carriages_list.xml';
     const ERROR_PATH = 'error.xml';
@@ -50,7 +50,7 @@ class RzdFacade {
      */
     private function getList(string $listName, Search $search)
     {
-        $rawData = $this->getXml($listName); // . $search->generateGetMethod()
+        $rawData = $this->getXml($listName . $search->generateGetMethod());
 
         $error = $this->checkRawData($rawData, $listName);
 

@@ -84,17 +84,23 @@ class Search {
     /**
      * @return string
      */
-    public function generateGetMethod()
+    public function generateTrainGetMethod()
     {
-        $getMethod =
-            '?from=' . $this->getFromStation() .
+        $getMethod = '?from=' . $this->getFromStation() .
             '&to=' . $this->getToStation() .
             '&month=' . $this->getDepartDate()->format('m') .
             '&day=' . $this->getDepartDate()->format('d');
 
-        if ($this->getTrainId()) {
-            $getMethod .= '&train=' . $this->getTrainId();
-        }
+        return $getMethod;
+    }
+
+    /**
+     * @return string
+     */
+    public function generateCarriageGetMethod()
+    {
+        $getMethod = $this->generateTrainGetMethod() .
+            '&train=' . $this->getTrainId();
 
         return $getMethod;
     }

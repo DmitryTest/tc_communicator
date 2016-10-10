@@ -1,8 +1,8 @@
-{% if errors[constant('AppBundle\\Service\\RzdFacade::TRAINS_PATH')] is defined %}
+{% if errors[constant('AppBundle\\Service\\Rzd\\Api::TRAINS_PATH')] is defined %}
     <div class="error">
-        error code: {{ errors[constant('AppBundle\\Service\\RzdFacade::TRAINS_PATH')]['code'] }}
+        error code: {{ errors[constant('AppBundle\\Service\\Rzd\\Api::TRAINS_PATH')]['code'] }}
         <br>
-        {{ errors[constant('AppBundle\\Service\\RzdFacade::TRAINS_PATH')]['desc'] }}
+        {{ errors[constant('AppBundle\\Service\\Rzd\\Api::TRAINS_PATH')]['desc'] }}
     </div>
 {% endif %}
 

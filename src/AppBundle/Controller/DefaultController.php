@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Service\Search;
-use AppBundle\Service\RzdFacade;
+use AppBundle\Service\Rzd\Facade;
 use DateTime;
 
 class DefaultController extends Controller
@@ -32,7 +32,7 @@ class DefaultController extends Controller
             $data = $form->getData();
             $search = $this->getSearch($data);
 
-            $rzd = new RzdFacade();
+            $rzd = new Facade();
             $trains = $rzd->getTrainsList($search);
 
             $trainId = $data['trainId'];

@@ -1,21 +1,29 @@
 <?php
 
-namespace AppBundle\Service;
+namespace AppBundle\Service\Rzd;
 
 use AppBundle\Entity\Carriage;
 use AppBundle\Entity\CarriageType;
 use AppBundle\Entity\TrainCategory;
 use AppBundle\Entity\Train;
+use AppBundle\Service\FacadeInterface;
+use AppBundle\Service\Search;
 use DateTime;
 use SimpleXMLElement;
 
-class RzdFacade {
-    const BASE_PATH = 'https://raw.githubusercontent.com/DmitryTest/tc_communicator/master/web/ws/';
-    const TRAINS_PATH = 'trains_list.xml';
-    const CARRIAGE_PATH = 'carriages_list.xml';
-    const ERROR_PATH = 'error.xml';
-
+class Facade implements FacadeInterface {
     private $errors = [];
+
+    /** @var Api $api */
+    private $api;
+
+    /**
+     * RzdFacade constructor.
+     */
+    public function __construct()
+    {
+        $this->api = new Api();
+    }
 
     /**
      * @param Search $search
@@ -23,7 +31,7 @@ class RzdFacade {
      */
     public function getTrainsList(Search $search)
     {
-        return $this->getList(self::TRAINS_PATH, $search);
+        return $this->getList(Api::TRAINS_PATH, $search->generateTrainGetMethod());
 	}
 
     /**
@@ -32,7 +40,7 @@ class RzdFacade {
      */
     public function getCarriagesList(Search $search)
     {
-        return $this->getList(self::CARRIAGE_PATH, $search);
+        return $this->getList(Api::CARRIAGE_PATH, $search->generateCarriageGetMethod());
     }
 
     /**
@@ -45,21 +53,21 @@ class RzdFacade {
 
     /**
      * @param string $listName
-     * @param Search $search
+     * @param string $path
      * @return array
      */
-    private function getList(string $listName, Search $search)
+    private function getList(string $listName, string $path)
     {
-        $rawData = $this->getXml($listName . $search->generateGetMethod());
+        $rawData = $this->api->getXml($listName . $path);
 
         $error = $this->checkRawData($rawData, $listName);
 
         $list = [];
         if ($error) return $list;
 
-        if ($listName == self::TRAINS_PATH) {
+        if ($listName == Api::TRAINS_PATH) {
             $list = $this->normalizeTrains($rawData);
-        } elseif ($listName == self::CARRIAGE_PATH) {
+        } elseif ($listName == Api::CARRIAGE_PATH) {
             $list = $this->normalizeCarriage($rawData);
         }
         return $list;
@@ -127,28 +135,5 @@ class RzdFacade {
             $carriages[] = $carriage;
         }
         return $carriages;
-    }
-
-    /**
-     * @param string $path
-     * @return SimpleXMLElement
-     */
-	private function getXml(string $path)
-    {
-        $path = $this->generateError($path);
-        $url = self::BASE_PATH . $path;
-        $xml = simplexml_load_file($url) or die("feed not loading");
-        return $xml;
-    }
-
-    /**
-     * @param $path
-     * @return string
-     */
-    private function generateError($path)
-    {
-        return rand(0, 4) == 4
-            ? self::ERROR_PATH
-            : $path;
     }
 }

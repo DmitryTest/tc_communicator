@@ -1,8 +1,8 @@
-{% if errors[constant('AppBundle\\Service\\RzdFacade::CARRIAGE_PATH')] is defined %}
+{% if errors[constant('AppBundle\\Service\\Rzd\\Api::CARRIAGE_PATH')] is defined %}
     <div class="error">
-        error code: {{ errors[constant('AppBundle\\Service\\RzdFacade::CARRIAGE_PATH')]['code'] }}
+        error code: {{ errors[constant('AppBundle\\Service\\Rzd\\Api::CARRIAGE_PATH')]['code'] }}
         <br>
-        {{ errors[constant('AppBundle\\Service\\RzdFacade::CARRIAGE_PATH')]['desc'] }}
+        {{ errors[constant('AppBundle\\Service\\Rzd\\Api::CARRIAGE_PATH')]['desc'] }}
     </div>
 {% endif %}
 
